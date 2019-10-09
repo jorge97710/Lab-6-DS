@@ -13,9 +13,9 @@ sea.countplot(data['reviews.userCity'])
 plt.show()
 sea.countplot(data['reviews.userProvince'])
 plt.show()
-plt.hist(seq_lens, bins=50)
-plt.show()
 sea.countplot(data['seq_lens'])
 plt.show()
 plt.matshow(data.corr())
 plt.show()
+
+
