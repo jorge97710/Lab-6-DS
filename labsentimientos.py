@@ -45,5 +45,21 @@ def remove_urls (vTEXT):
     return(vTEXT)
 
 
+def lower(text):
+    return text.lower()
+
+
+def remove_punctuation(text):
+    punct = string.punctuation
+    trantab = str.maketrans(punct, len(punct)*' ')
+    return text.translate(trantab)
+
+
+remove_emoji(data)
+lowe(data)
+remove_punctuation(data)
+data.translate(str.maketrans("?!,$.@", 6*" ", string.punctuation))
+
+
 
 
