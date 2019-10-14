@@ -85,6 +85,62 @@ for data in reviews_split:
     reviews_int.append(r)
 print (reviews_int[0:3])
 
+import numpy as nmp 
+#import nltk
+#nltk.download('all')
+import pandas as pd
+import os
+import seaborn as sea
+import matplotlib.pyplot as plt
+import re
+from string import punctuation
+from textblob import TextBlob
+
+
+
+data = pd.read_csv('GrammarandProductReviews.csv')
+#print(data.head)
+str = str(data)
+for col in data.columns: 
+    print(col)
+#reviews.doRecommend
+df = pd.DataFrame(data,columns=['reviews.text'])
+print("DF", df)
+print (', '.join(df))
+df = ', '.join(df)
+#df = str.lower()
+print("STRING CONVERT",df)
+print("END CONVERT")
+#print(data(reviews.doRecommend))
+#print(data)
+#data = str.lower()
+#data = ''.join(data)
+text = '''
+The titular threat of The Blob has always struck me as the ultimate movie
+monster: an insatiably hungry, amoeba-like mass able to penetrate
+virtually any safeguard, capable of--as a doomed doctor chillingly
+describes it--"assimilating flesh on contact.
+Snide comparisons to gelatin be damned, it's a concept with the most
+devastating of potential consequences, not unlike the grey goo scenario
+proposed by technological theorists fearful of
+artificial intelligence run rampant.
+'''
+from textblob import TextBlob
+
+blob = TextBlob(text)
+print(blob)
+blob.tags           # [('The', 'DT'), ('titular', 'JJ'),
+                    #  ('threat', 'NN'), ('of', 'IN'), ...]
+print(blob.tags)
+blob.noun_phrases   # WordList(['titular threat', 'blob',
+                    #            'ultimate movie monster',
+                    #            'amoeba-like mass', ...])
+print(blob.noun_phrases)
+for sentence in blob.sentences:
+    print(sentence.sentiment.polarity)
+
+
+blob.translate(to="es")  # 'La amenaza titular de The Blob...'
 
 
 
