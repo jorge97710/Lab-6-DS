@@ -60,6 +60,31 @@ lowe(data)
 remove_punctuation(data)
 data.translate(str.maketrans("?!,$.@", 6*" ", string.punctuation))
 
+#print(data.head)
+str = str(data)
+#print(data)
+data = str.lower()
+print (data)
+
+all_text = ''.join([c for c in data if c not in punctuation])
+reviews_split = all_text.split("\n")
+from collections import Counter
+all_text2 = ' '.join(reviews_split)
+# create a list of words
+words = all_text2.split()
+# Count all the words using Counter Method
+count_words = Counter(words)
+
+total_words = len(words)
+sorted_words = count_words.most_common(total_words)
+vocab_to_int = {w:i+1 for i, (w,c) in enumerate(sorted_words)}
+print ('Number of reviews :', len(reviews_split))
+reviews_int = []
+for data in reviews_split:
+    r = [vocab_to_int[w] for w in data.split()]
+    reviews_int.append(r)
+print (reviews_int[0:3])
+
 
 
 
