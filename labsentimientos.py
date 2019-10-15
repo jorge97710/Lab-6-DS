@@ -143,4 +143,31 @@ for sentence in blob.sentences:
 blob.translate(to="es")  # 'La amenaza titular de The Blob...'
 
 
+## Fuente: https://stackoverflow.com/questions/16645799/how-to-create-a-word-cloud-from-a-corpus-in-python
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+stopwords = set(STOPWORDS)
+
+
+
+def show_wordcloud(data):
+    wordcloud = WordCloud(
+        background_color='white',
+        stopwords=stopwords,
+        max_words=200,
+        max_font_size=40, 
+        scale=3,
+        random_state=1
+    ).generate(str(data))
+
+    fig = plt.figure(1, figsize=(12, 12))
+    plt.axis('off')
+    if title: 
+        fig.suptitle(title, fontsize=20)
+        fig.subplots_adjust(top=2.3)
+
+    plt.imshow(wordcloud)
+    plt.show()
+
+show_wordcloud(data['reviews.text'])
 
