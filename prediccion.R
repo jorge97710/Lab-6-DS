@@ -3,29 +3,30 @@ library(tidyverse)
 library(tau)
 library(tm)
 library(hash)
+library("tm")
+library(dplyr)
 
 data <- read.csv("C:/Users/User/Desktop/Lab-6-DS/GrammarandProductReviews.csv")
 data<- data.frame( text = data$reviews.text)
 
 for (val in data){
-  variable %+=% val + " "
+  variable <- val 
 }
+print(variable)
 
-removeURL <- function(data) gsub("http\\S+", "", x)
-removeHash <- function(data) gsub("[@#&]\\S+", "", x)
+removeURL <- function(data) gsub("http\\S+", "", variable)
+removeHash <- function(data) gsub("[@#&]\\S+", "", variable)
 
-removeNumPunct <- function(data) gsub("[^A-z[:space:]']*", "", x)
+removeNumPunct <- function(data) gsub("[^A-z[:space:]']*", "", variable)
 h <- hash()
 
 nbtach <- 60
 for (b in 1:49) {
   # for (b in 12932) {
   message(sprintf("Processing the %i-th batch", b))
-  
-  #concatetar los textos
-  data <- data[data.len * b + (1:data.len)]
 
-  bnt <- c(data) %>% 
+
+  bnt <- c(variable) %>% 
     removeURL() %>% removeHash() %>% 
     removeNumPunct() %>% tolower() %>% stripWhitespace()
   
