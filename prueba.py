@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import nltk
+from nltk import ngrams
 from nltk.corpus import stopwords
 import string
 import nltk
@@ -86,6 +87,12 @@ freqlist = {}
 inF = open("reviews_limpio.txt", "r", encoding="utf-8")
 s = inF.read()
 inF.close()
+
+
+inF = open("reviews_limpio.txt", "r", encoding="utf-8")
+ese = inF.read()
+inF.close()
+
 s = s.lower()
 wordlist = re.split(r"\W", s)
 for wd in wordlist:
@@ -112,18 +119,30 @@ x = f.readlines()
 f.close()
 #print (x)
 results = []
-
+i=0
 for item in x:
     blob = TextBlob(str(item))
     for sentence in blob.sentences:
         #print(sentence.sentiment.polarity)
-        results.append([item,sentence.sentiment.polarity])
+        results.append([sentence.sentiment.polarity,data['name'][i],data['reviews.username'][i]])
+        i = i + 1
 
-df = pd.DataFrame(results, columns=['Review', 'Score'])
+df = pd.DataFrame(results, columns=[ 'Score','product','user'])
 
 print("done")
 print(df.head(20))
 
+
+print("---------------------------------------------------------------------------------------")
+ndf = df.groupby(['product'])['Score'].sum()
+ndf.columns = ['Product','Score']
+
+print(ndf.head(20))
+#print("LOS 10 CON MEJOR REVIEW")
+#print((ndf.sort_values(ndf.columns[1], ascending=False).head(10)))
+
+#print("LOS 10 CON peor REVIEW")
+#print((ndf.sort_values(ndf.columns[1], ascending=True).head(10)))
 
 
 from wordcloud import WordCloud, STOPWORDS
@@ -148,4 +167,85 @@ def show_wordcloud(data):
     plt.imshow(wordcloud)
     plt.show()
 
-show_wordcloud(s)
+show_wordcloud(ese)
+
+
+##PRedicciones, n-gramas y mas
+
+##NGRAMA para el 5% de blogs limpio
+bcinco = open("reviews_limpio.txt", "r", encoding="utf-8")
+bctxt = bcinco.read()
+bcinco.close()
+n = 2
+unigrams= ngrams(bctxt.split(), n-1)
+bigrams = ngrams(bctxt.split(), n)
+trigrams = ngrams(bctxt.split(), n + 1)
+
+# for grams in bigrams:
+#    print (grams)
+
+
+##prueba diferente ngramas
+# nltk.download('punkt')
+tokens = nltk.word_tokenize(bctxt)
+
+# Create your bigrams
+
+ugs = unigrams
+bgs = nltk.bigrams(tokens)
+tgs = nltk.trigrams(tokens)
+unigrams=[]
+bigrams = []
+trigrams = []
+
+# compute frequency distribution for all the bigrams in the text
+fdist = nltk.FreqDist(bgs)
+for k, v in fdist.items():
+    # print (k,v)
+    bigrams.append([k, v])
+
+print(fdist)
+
+df = pd.DataFrame(bigrams, columns=['Bigram', 'Freq'])
+# print(df.iloc[1:])
+ndf = df.sort_values('Freq', ascending=False)
+
+print(ndf.head(20))
+
+fndf = ndf.head(20)
+fndf.plot(kind='bar', x='Bigram', y='Freq')
+plt.show()
+
+print(ndf.size)
+ndf['Probabilidad'] = ndf['Freq'] / ndf.size
+
+print(ndf.head(20))
+
+# compute frequency distribution for all the bigrams in the text
+fdist = nltk.FreqDist(tgs)
+for k, v in fdist.items():
+    # print (k,v)
+    trigrams.append([k, v])
+
+print(fdist)
+
+df = pd.DataFrame(trigrams, columns=['Trigram', 'Freq'])
+# print(df.iloc[1:])
+ndf = df.sort_values('Freq', ascending=False)
+
+print(ndf.head(20))
+
+fndf = ndf.head(20)
+fndf.plot(kind='bar', x='Trigram', y='Freq')
+plt.show()
+
+print(ndf.size)
+ndf['Probabilidad'] = ndf['Freq'] / ndf.size
+
+print(ndf.head(20))
+
+
+##pruebas
+
+print (data['name'][0])
+
